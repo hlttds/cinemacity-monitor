@@ -31,11 +31,6 @@ def send_telegram(message):
 
 
 def main():
-    test_message = os.environ.get("TEST_MESSAGE", "")
-    if test_message:
-        send_telegram(test_message)
-        return
-
     today = subprocess.check_output(["date", "-u", "+%F"]).decode().strip()
     if today > END_DATE:
         print(f"Past end date {END_DATE} (today {today}), nothing to do.")
