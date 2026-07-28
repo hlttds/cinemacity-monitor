@@ -2,7 +2,7 @@ name: Cinemacity Odyssea 70mm Monitor
 
 on:
   schedule:
-    - cron: "*/5 6-21 * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch: {}
 
 jobs:
