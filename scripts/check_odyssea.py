@@ -21,13 +21,13 @@ def fetch_events():
     return data.get("body", {}).get("events", [])
 
 
-def send_whatsapp(message):
-    phone = os.environ["CALLMEBOT_PHONE"]
-    apikey = os.environ["CALLMEBOT_APIKEY"]
-    query = urllib.parse.urlencode({"phone": phone, "text": message, "apikey": apikey})
-    url = f"https://api.callmebot.com/whatsapp.php?{query}"
-    with urllib.request.urlopen(url, timeout=30) as resp:
-        print("callmebot response:", resp.read().decode())
+def send_telegram(message):
+    token = os.environ["TELEGRAM_BOT_TOKEN"]
+    chat_id = os.environ["TELEGRAM_CHAT_ID"]
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    data = urllib.parse.urlencode({"chat_id": chat_id, "text": message}).encode()
+    with urllib.request.urlopen(url, data=data, timeout=30) as resp:
+        print("telegram response:", resp.read().decode())
 
 
 def main():
@@ -60,7 +60,7 @@ def main():
     else:
         msg = "Odyssea 70mm 16.8 Flora: showtimes published but already SOLD OUT."
 
-    send_whatsapp(msg)
+    send_telegram(msg)
 
 
 if __name__ == "__main__":
