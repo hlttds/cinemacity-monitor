@@ -3,7 +3,12 @@ name: Cinemacity Odyssea 70mm Monitor
 on:
   schedule:
     - cron: "5 6-21 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      test_show_date:
+        description: "Override SHOW_DATE for a test run against an already-published date"
+        required: false
+        default: ""
 
 jobs:
   check:
@@ -14,4 +19,5 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TEST_SHOW_DATE: ${{ github.event.inputs.test_show_date }}
         run: python3 scripts/check_odyssea.py

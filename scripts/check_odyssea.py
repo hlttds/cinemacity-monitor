@@ -6,7 +6,7 @@ import urllib.parse
 import urllib.request
 
 CINEMA_ID = "1052"  # OC Flora
-SHOW_DATE = "2026-08-16"
+SHOW_DATE = os.environ.get("TEST_SHOW_DATE") or "2026-08-16"
 FILM_ID = "7268s2r"  # Odyssea
 END_DATE = "2026-08-16"
 
