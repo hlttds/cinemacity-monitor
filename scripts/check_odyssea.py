@@ -7,7 +7,7 @@ import urllib.request
 
 CINEMA_ID = "1052"  # OC Flora
 CINEMA_SLUG = "flora"
-SHOW_DATE = os.environ.get("TEST_SHOW_DATE") or "2026-08-15"
+SHOW_DATE = "2026-08-15"
 FILM_ID = "7268s2r"  # Odyssea
 END_DATE = "2026-08-15"
 PROGRAMME_LINK = (
