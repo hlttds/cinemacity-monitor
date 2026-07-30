@@ -2,6 +2,8 @@
 import json
 import os
 import subprocess
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -16,14 +18,21 @@ PROGRAMME_LINK = (
 )
 
 
-def fetch_events():
+def fetch_events(retries=3):
     url = (
         "https://www.cinemacity.cz/cz/data-api-service/v1/quickbook/10101/"
         f"film-events/in-cinema/{CINEMA_ID}/at-date/{SHOW_DATE}?attr=&lang=cs_CZ"
     )
-    with urllib.request.urlopen(url, timeout=30) as resp:
-        data = json.load(resp)
-    return data.get("body", {}).get("events", [])
+    for attempt in range(1, retries + 1):
+        try:
+            with urllib.request.urlopen(url, timeout=30) as resp:
+                data = json.load(resp)
+            return data.get("body", {}).get("events", [])
+        except (urllib.error.URLError, TimeoutError) as e:
+            if attempt == retries:
+                raise
+            print(f"fetch attempt {attempt} failed ({e}), retrying...")
+            time.sleep(5)
 
 
 def send_telegram(message):
