@@ -6,9 +6,14 @@ import urllib.parse
 import urllib.request
 
 CINEMA_ID = "1052"  # OC Flora
-SHOW_DATE = "2026-08-15"
+CINEMA_SLUG = "flora"
+SHOW_DATE = os.environ.get("TEST_SHOW_DATE") or "2026-08-15"
 FILM_ID = "7268s2r"  # Odyssea
 END_DATE = "2026-08-15"
+PROGRAMME_LINK = (
+    f"https://www.cinemacity.cz/cinemas/{CINEMA_SLUG}/{CINEMA_ID}"
+    f"#/buy-tickets-by-cinema?in-cinema={CINEMA_ID}&at={SHOW_DATE}&for-movie={FILM_ID}&view-mode=list"
+)
 
 
 def fetch_events():
@@ -54,11 +59,10 @@ def main():
         others = len(available) - 1
         pct = round(best.get("availabilityRatio", 0) * 100)
         time_str = best["eventDateTime"].split("T")[1][:5]
-        link = best["bookingRouterLaunchLink"]
         extra = f" (+{others} more)" if others > 0 else ""
-        msg = f"Odyssea 70mm 15.8 Flora LIVE! {time_str} avail {pct}%{extra} -> {link}"
+        msg = f"Odyssea 70mm 15.8 Flora LIVE! {time_str} avail {pct}%{extra} -> {PROGRAMME_LINK}"
     else:
-        msg = "Odyssea 70mm 15.8 Flora: showtimes published but already SOLD OUT."
+        msg = f"Odyssea 70mm 15.8 Flora: showtimes published but already SOLD OUT. -> {PROGRAMME_LINK}"
 
     send_telegram(msg)
 
