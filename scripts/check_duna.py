@@ -41,8 +41,12 @@ def send_telegram(message):
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     data = urllib.parse.urlencode({"chat_id": chat_id, "text": message}).encode()
-    with urllib.request.urlopen(url, data=data, timeout=30) as resp:
-        print("telegram response:", resp.read().decode())
+    try:
+        with urllib.request.urlopen(url, data=data, timeout=30) as resp:
+            print("telegram response:", resp.read().decode())
+    except urllib.error.HTTPError as e:
+        print("telegram error body:", e.read().decode())
+        raise
 
 
 def minutes_from_preferred(event):
