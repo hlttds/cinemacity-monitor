@@ -9,9 +9,9 @@ import urllib.request
 
 CINEMA_ID = "1052"  # OC Flora
 CINEMA_SLUG = "flora"
-SHOW_DATE = "2026-12-19"
+SHOW_DATE = "2026-12-15"  # TEMP TEST override - real target is 2026-12-19
 FILM_ID = "8105s2r"  # Duna: cast treti (Dune: Part Three)
-END_DATE = "2026-12-19"
+END_DATE = "2026-12-15"  # TEMP TEST override
 PREFERRED_HOUR_MINUTES = 17 * 60  # user wants a showtime around 17:00
 PROGRAMME_LINK = (
     f"https://www.cinemacity.cz/cinemas/{CINEMA_SLUG}/{CINEMA_ID}"
