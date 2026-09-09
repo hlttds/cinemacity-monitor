@@ -9,9 +9,10 @@ import urllib.request
 
 CINEMA_ID = "1052"  # OC Flora
 CINEMA_SLUG = "flora"
-SHOW_DATE = "2026-08-15"
-FILM_ID = "7268s2r"  # Odyssea
-END_DATE = "2026-08-15"
+SHOW_DATE = "2026-12-19"
+FILM_ID = "8105s2r"  # Duna: cast treti (Dune: Part Three)
+END_DATE = "2026-12-19"
+PREFERRED_HOUR_MINUTES = 17 * 60  # user wants a showtime around 17:00
 PROGRAMME_LINK = (
     f"https://www.cinemacity.cz/cinemas/{CINEMA_SLUG}/{CINEMA_ID}"
     f"#/buy-tickets-by-cinema?in-cinema={CINEMA_ID}&at={SHOW_DATE}&for-movie={FILM_ID}&view-mode=list"
@@ -44,6 +45,11 @@ def send_telegram(message):
         print("telegram response:", resp.read().decode())
 
 
+def minutes_from_preferred(event):
+    hh, mm = event["eventDateTime"].split("T")[1][:5].split(":")
+    return abs(int(hh) * 60 + int(mm) - PREFERRED_HOUR_MINUTES)
+
+
 def main():
     today = subprocess.check_output(["date", "-u", "+%F"]).decode().strip()
     if today > END_DATE:
@@ -64,14 +70,15 @@ def main():
     available = [e for e in matches if not e.get("soldOut")]
 
     if available:
-        best = max(available, key=lambda e: e.get("availabilityRatio", 0))
+        # Prefer the showtime closest to 17:00, not just the most available one
+        best = min(available, key=minutes_from_preferred)
         others = len(available) - 1
         pct = round(best.get("availabilityRatio", 0) * 100)
         time_str = best["eventDateTime"].split("T")[1][:5]
         extra = f" (+{others} more)" if others > 0 else ""
-        msg = f"Odyssea 70mm 15.8 Flora LIVE! {time_str} avail {pct}%{extra} -> {PROGRAMME_LINK}"
+        msg = f"Duna3 70mm 19.12 Flora LIVE! {time_str} avail {pct}%{extra} -> {PROGRAMME_LINK}"
     else:
-        msg = f"Odyssea 70mm 15.8 Flora: showtimes published but already SOLD OUT. -> {PROGRAMME_LINK}"
+        msg = f"Duna3 70mm 19.12 Flora: showtimes published but already SOLD OUT. -> {PROGRAMME_LINK}"
 
     send_telegram(msg)
 

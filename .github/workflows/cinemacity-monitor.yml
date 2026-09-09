@@ -1,8 +1,9 @@
-name: Cinemacity Odyssea 70mm Monitor
+name: Cinemacity Duna3 70mm Monitor
 
+# Triggered externally (every 20 min) via a POST to this workflow's
+# /dispatches endpoint from an outside cron service, instead of GitHub's
+# own `schedule:` trigger.
 on:
-  schedule:
-    - cron: "3-58/5 * * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -14,4 +15,4 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python3 scripts/check_odyssea.py
+        run: python3 scripts/check_duna.py
